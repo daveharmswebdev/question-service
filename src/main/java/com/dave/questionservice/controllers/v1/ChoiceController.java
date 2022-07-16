@@ -30,4 +30,22 @@ public class ChoiceController {
     public ChoiceDto getChoiceById(@PathVariable Long id) {
         return choiceService.getChoiceById(id);
     }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public ChoiceDto createNewChoice(@RequestBody ChoiceDto choiceDto) {
+        return choiceService.createNewChoice(choiceDto);
+    }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ChoiceDto updateChoice(@PathVariable Long id, @RequestBody ChoiceDto choiceDto) {
+        return choiceService.saveChoiceByDto(id, choiceDto);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteChoice(@PathVariable Long id) {
+        choiceService.deleteChoiceById(id);
+    }
 }

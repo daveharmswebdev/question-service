@@ -31,7 +31,7 @@ public class ChoiceServiceImpl implements ChoiceService {
     @Override
     public ChoiceDto getChoiceById(Long id) {
         return choiceRepository.findById(id)
-                .map(choiceMapper::choiceToChoiceDto).orElseThrow(RuntimeException::new);
+                .map(choiceMapper::choiceToChoiceDto).orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override
@@ -42,9 +42,10 @@ public class ChoiceServiceImpl implements ChoiceService {
 
     @Override
     public ChoiceDto saveChoiceByDto(Long id, ChoiceDto choiceDto) {
-        Choice choice = choiceMapper.choiceDtoToChoice(choiceDto);
-        choice.setId(id);
-        return saveAndReturnDto(choice);
+        Choice choiceToUpdate = choiceRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        choiceToUpdate.setName(choiceDto.getName());
+        choiceToUpdate.setDescription(choiceDto.getDescription());
+        return saveAndReturnDto(choiceToUpdate);
     }
 
     @Override

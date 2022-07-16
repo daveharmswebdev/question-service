@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -98,8 +99,8 @@ class ChoiceServiceImplTest {
     @Test
     void saveChoiceByDto() {
         ChoiceDto choiceDto = ChoiceDto.builder()
-                .name("cinderella")
-                .description("everyone's favorite princess")
+                .name("Cinderella")
+                .description("the best princess")
                 .build();
 
         Choice choice = new Choice();
@@ -109,14 +110,23 @@ class ChoiceServiceImplTest {
         choice.setCreatedDate(NOW);
         choice.setLastModifiedDate(NOW);
 
-        when(choiceRepository.save(any(Choice.class))).thenReturn(choice);
+        Choice updatedChoice = new Choice();
+        updatedChoice.setId(ID);
+        updatedChoice.setName("Cinderella");
+        updatedChoice.setDescription("the best princess");
+        updatedChoice.setCreatedDate(NOW);
+        updatedChoice.setLastModifiedDate(NOW);
+
+        when(choiceRepository.findById(anyLong())).thenReturn(Optional.of(choice));
+        when(choiceRepository.save(any(Choice.class))).thenReturn(updatedChoice);
 
         ChoiceDto savedChoiceByDto = choiceService.saveChoiceByDto(ID, choiceDto);
 
         assertEquals(ID, savedChoiceByDto.getId());
-        assertEquals("cinderella", savedChoiceByDto.getName());
-        assertEquals("everyone's favorite princess", savedChoiceByDto.getDescription());
+        assertEquals("Cinderella", savedChoiceByDto.getName());
+        assertEquals("the best princess", savedChoiceByDto.getDescription());
         assertEquals(NOW, savedChoiceByDto.getCreatedDate());
+        assertThat(savedChoiceByDto.getCreatedDate()).isNotNull();
     }
 
     @Test
