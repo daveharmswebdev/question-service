@@ -2,18 +2,16 @@ package com.dave.questionservice.api.v1.mapper;
 
 import com.dave.questionservice.api.v1.model.ChoiceDto;
 import com.dave.questionservice.domain.Choice;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Timestamp;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class ChoiceMapperTest {
 
     @Test
-    public void shouldMapChoiceToChoiceDt0() {
+    public void shouldMapChoiceToChoiceDto() {
 
         Timestamp now = new Timestamp(System.currentTimeMillis());
 
