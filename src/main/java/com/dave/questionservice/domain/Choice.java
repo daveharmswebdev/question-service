@@ -1,7 +1,8 @@
 package com.dave.questionservice.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
+
+import java.util.Set;
 
 @Entity
 public class Choice extends BaseEntity {
@@ -9,8 +10,11 @@ public class Choice extends BaseEntity {
     private String name;
     private String description;
 
-    @ManyToOne
-    private Question question;
+    @ManyToMany
+    @JoinTable(name = "question_choice",
+        joinColumns = @JoinColumn(name = "choice_id"),
+            inverseJoinColumns = @JoinColumn(name = "question_id"))
+    private Set<Question> questions;
 
     public String getName() {
         return name;
@@ -28,12 +32,12 @@ public class Choice extends BaseEntity {
         this.description = description;
     }
 
-    public Question getQuestion() {
-        return question;
+    public Set<Question> getQuestions() {
+        return questions;
     }
 
-    public void setQuestion(Question question) {
-        this.question = question;
+    public void setQuestions(Set<Question> questions) {
+        this.questions = questions;
     }
 
     @Override
@@ -45,9 +49,7 @@ public class Choice extends BaseEntity {
         Choice choice = (Choice) o;
 
         if (getName() != null ? !getName().equals(choice.getName()) : choice.getName() != null) return false;
-        if (getDescription() != null ? !getDescription().equals(choice.getDescription()) : choice.getDescription() != null)
-            return false;
-        return getQuestion() != null ? getQuestion().equals(choice.getQuestion()) : choice.getQuestion() == null;
+        return getDescription() != null ? getDescription().equals(choice.getDescription()) : choice.getDescription() == null;
     }
 
     @Override

@@ -1,10 +1,10 @@
 package com.dave.questionservice.domain;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -13,17 +13,11 @@ public class Question extends BaseEntity {
     private String title;
     private String questionText;
 
-    @OneToMany(mappedBy = "question", cascade = CascadeType.PERSIST)
+    @ManyToMany
+    @JoinTable(name = "question_choice",
+        joinColumns = @JoinColumn(name = "question_id"),
+            inverseJoinColumns = @JoinColumn(name = "choice_id"))
     private Set<Choice> choices;
-
-    public void addChoice(Choice choice) {
-        if (choices == null) {
-            choices = new HashSet<>();
-        }
-
-        choices.add(choice);
-        choice.setQuestion(this);
-    }
 
     public String getTitle() {
         return title;
@@ -58,9 +52,7 @@ public class Question extends BaseEntity {
         Question question = (Question) o;
 
         if (getTitle() != null ? !getTitle().equals(question.getTitle()) : question.getTitle() != null) return false;
-        if (getQuestionText() != null ? !getQuestionText().equals(question.getQuestionText()) : question.getQuestionText() != null)
-            return false;
-        return getChoices() != null ? getChoices().equals(question.getChoices()) : question.getChoices() == null;
+        return getQuestionText() != null ? getQuestionText().equals(question.getQuestionText()) : question.getQuestionText() == null;
     }
 
     @Override
@@ -68,7 +60,6 @@ public class Question extends BaseEntity {
         int result = super.hashCode();
         result = 31 * result + (getTitle() != null ? getTitle().hashCode() : 0);
         result = 31 * result + (getQuestionText() != null ? getQuestionText().hashCode() : 0);
-        result = 31 * result + (getChoices() != null ? getChoices().hashCode() : 0);
         return result;
     }
 }

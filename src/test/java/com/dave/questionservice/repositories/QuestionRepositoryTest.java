@@ -8,9 +8,11 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ActiveProfiles("local")
 @DataJpaTest
@@ -19,6 +21,9 @@ class QuestionRepositoryTest {
 
     @Autowired
     QuestionRepository questionRepository;
+
+    @Autowired
+    ChoiceRepository choiceRepository;
 
     @Test
     void testSavedChoice() {
@@ -29,13 +34,18 @@ class QuestionRepositoryTest {
         Choice choiceA = new Choice();
         choiceA.setName("test name");
         choiceA.setDescription("test description");
+        Choice savedChoiceA = choiceRepository.saveAndFlush(choiceA);
 
         Choice choiceB = new Choice();
         choiceB.setName("test name b");
         choiceB.setDescription("test description b");
+        Choice savedChoiceB = choiceRepository.saveAndFlush(choiceB);
 
-        question.addChoice(choiceA);
-        question.addChoice(choiceB);
+        Set<Choice> choices = new HashSet<>();
+        choices.add(savedChoiceA);
+        choices.add(savedChoiceB);
+
+        question.setChoices(choices);
 
         Question savedQuestion = questionRepository.save(question);
         questionRepository.flush();
