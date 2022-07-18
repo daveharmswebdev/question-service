@@ -4,10 +4,12 @@ import com.dave.questionservice.api.v1.mapper.QuestionMapper;
 import com.dave.questionservice.api.v1.model.QuestionDto;
 import com.dave.questionservice.domain.Question;
 import com.dave.questionservice.repositories.QuestionRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
 public class QuestionServiceImpl implements QuestionService {
 
     private final QuestionMapper questionMapper;
