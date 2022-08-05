@@ -1,5 +1,6 @@
 package com.dave.questionservice.services;
 
+import com.dave.questionservice.api.v1.mapper.CycleAvoidingMappingContext;
 import com.dave.questionservice.api.v1.mapper.QuestionMapper;
 import com.dave.questionservice.api.v1.model.QuestionDto;
 import com.dave.questionservice.domain.Question;
@@ -22,20 +23,28 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public List<QuestionDto> getAllQuestions() {
-        return questionRepository.findAll()
+
+        List<Question> allQuestions = questionRepository.findAll();
+
+        List<QuestionDto> allDtos = allQuestions
                 .stream()
-                .map(questionMapper::questionToQuestionDto).collect(Collectors.toList());
+                .map(question ->
+                    questionMapper.questionToQuestionDto(question, new CycleAvoidingMappingContext())
+                ).collect(Collectors.toList());
+
+        return allDtos;
     }
 
     @Override
     public QuestionDto getQuestionById(Long id) {
         return questionRepository.findById(id)
-                .map(questionMapper::questionToQuestionDto).orElseThrow(ResourceNotFoundException::new);
+                .map(question ->
+                        questionMapper.questionToQuestionDto(question, new CycleAvoidingMappingContext())).orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override
     public QuestionDto createNewQuestion(QuestionDto questionDto) {
-        Question question = questionMapper.questionDtoToQuestion(questionDto);
+        Question question = questionMapper.questionDtoToQuestion(questionDto, new CycleAvoidingMappingContext());
         return saveAndReturnDto(question);
     }
 
@@ -55,6 +64,6 @@ public class QuestionServiceImpl implements QuestionService {
 
     private QuestionDto saveAndReturnDto(Question question) {
         Question savedQuestion = questionRepository.save(question);
-        return questionMapper.questionToQuestionDto(savedQuestion);
+        return questionMapper.questionToQuestionDto(savedQuestion, new CycleAvoidingMappingContext());
     }
 }

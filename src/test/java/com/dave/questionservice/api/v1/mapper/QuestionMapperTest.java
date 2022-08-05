@@ -21,7 +21,7 @@ class QuestionMapperTest {
         question.setCreatedDate(now);
         question.setLastModifiedDate(now);
 
-        QuestionDto questionDto = QuestionMapper.INSTANCE.questionToQuestionDto(question);
+        QuestionDto questionDto = QuestionMapper.INSTANCE.questionToQuestionDto(question, new CycleAvoidingMappingContext());
 
         assertThat(questionDto).isNotNull();
         assertThat(questionDto.getId()).isEqualTo(1L);
@@ -41,7 +41,7 @@ class QuestionMapperTest {
         questionDto.setQuestionText("question text");
         questionDto.setCreatedDate(now);
 
-        Question question = QuestionMapper.INSTANCE.questionDtoToQuestion(questionDto);
+        Question question = QuestionMapper.INSTANCE.questionDtoToQuestion(questionDto, new CycleAvoidingMappingContext());
 
         assertThat(question).isNotNull();
         assertThat(question.getId()).isEqualTo(1L);
