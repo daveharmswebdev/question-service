@@ -1,6 +1,5 @@
 package com.dave.questionservice.services;
 
-import com.dave.questionservice.api.v1.mapper.CycleAvoidingMappingContext;
 import com.dave.questionservice.api.v1.mapper.QuestionMapper;
 import com.dave.questionservice.api.v1.model.QuestionDto;
 import com.dave.questionservice.domain.Question;
@@ -23,28 +22,20 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public List<QuestionDto> getAllQuestions() {
-
-        List<Question> allQuestions = questionRepository.findAll();
-
-        List<QuestionDto> allDtos = allQuestions
+        return questionRepository.findAll()
                 .stream()
-                .map(question ->
-                    questionMapper.questionToQuestionDto(question, new CycleAvoidingMappingContext())
-                ).collect(Collectors.toList());
-
-        return allDtos;
+                .map(questionMapper::questionToQuestionDto).collect(Collectors.toList());
     }
 
     @Override
     public QuestionDto getQuestionById(Long id) {
         return questionRepository.findById(id)
-                .map(question ->
-                        questionMapper.questionToQuestionDto(question, new CycleAvoidingMappingContext())).orElseThrow(ResourceNotFoundException::new);
+                .map(questionMapper::questionToQuestionDto).orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override
     public QuestionDto createNewQuestion(QuestionDto questionDto) {
-        Question question = questionMapper.questionDtoToQuestion(questionDto, new CycleAvoidingMappingContext());
+        Question question = questionMapper.questionDtoToQuestion(questionDto);
         return saveAndReturnDto(question);
     }
 
@@ -64,6 +55,6 @@ public class QuestionServiceImpl implements QuestionService {
 
     private QuestionDto saveAndReturnDto(Question question) {
         Question savedQuestion = questionRepository.save(question);
-        return questionMapper.questionToQuestionDto(savedQuestion, new CycleAvoidingMappingContext());
+        return questionMapper.questionToQuestionDto(savedQuestion);
     }
 }

@@ -1,7 +1,6 @@
 package com.dave.questionservice.services;
 
 import com.dave.questionservice.api.v1.mapper.ChoiceMapper;
-import com.dave.questionservice.api.v1.mapper.CycleAvoidingMappingContext;
 import com.dave.questionservice.api.v1.model.ChoiceDto;
 import com.dave.questionservice.domain.Choice;
 import com.dave.questionservice.repositories.ChoiceRepository;
@@ -26,20 +25,18 @@ public class ChoiceServiceImpl implements ChoiceService {
     public List<ChoiceDto> getAllChoices() {
         return choiceRepository.findAll()
                 .stream()
-                .map(choice ->
-                        choiceMapper.choiceToChoiceDto(choice, new CycleAvoidingMappingContext())).collect(Collectors.toList());
+                .map(choiceMapper::choiceToChoiceDto).collect(Collectors.toList());
     }
 
     @Override
     public ChoiceDto getChoiceById(Long id) {
         return choiceRepository.findById(id)
-                .map(choice ->
-                        choiceMapper.choiceToChoiceDto(choice, new CycleAvoidingMappingContext())).orElseThrow(ResourceNotFoundException::new);
+                .map(choiceMapper::choiceToChoiceDto).orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override
     public ChoiceDto createNewChoice(ChoiceDto choiceDto) {
-        Choice choice = choiceMapper.choiceDtoToChoice(choiceDto, new CycleAvoidingMappingContext());
+        Choice choice = choiceMapper.choiceDtoToChoice(choiceDto);
         return saveAndReturnDto(choice);
     }
 
@@ -59,6 +56,6 @@ public class ChoiceServiceImpl implements ChoiceService {
 
     private ChoiceDto saveAndReturnDto(Choice choice) {
         Choice savedChoice = choiceRepository.save(choice);
-        return choiceMapper.choiceToChoiceDto(savedChoice, new CycleAvoidingMappingContext());
+        return choiceMapper.choiceToChoiceDto(savedChoice);
     }
 }

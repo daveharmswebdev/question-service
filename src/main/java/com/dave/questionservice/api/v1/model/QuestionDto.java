@@ -1,13 +1,11 @@
 package com.dave.questionservice.api.v1.model;
 
-import com.dave.questionservice.domain.Choice;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
-import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -19,5 +17,5 @@ public class QuestionDto {
     private String title;
     private String questionText;
     private Timestamp createdDate;
-    private Set<Choice> choices;
+
 }
