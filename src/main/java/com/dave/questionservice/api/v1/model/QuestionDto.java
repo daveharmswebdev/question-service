@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -17,5 +18,6 @@ public class QuestionDto {
     private String title;
     private String questionText;
     private Timestamp createdDate;
+    private Set<ChoiceNoQuestionDto> choices;
 
 }
