@@ -24,6 +24,14 @@ public abstract class BaseEntity {
     @UpdateTimestamp
     private Timestamp lastModifiedDate;
 
+    public BaseEntity() {}
+
+    public BaseEntity(Long id, Timestamp createdDate, Timestamp lastModifiedDate) {
+        this.id = id;
+        this.createdDate = createdDate;
+        this.lastModifiedDate = lastModifiedDate;
+    }
+
     public Long getId() {
         return id;
     }

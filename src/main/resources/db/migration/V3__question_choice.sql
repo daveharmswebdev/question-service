@@ -2,8 +2,8 @@ create table question_choice (
     question_id bigint not null,
     choice_id bigint not null,
     primary key (question_id, choice_id),
-    constraint pc_question_id_fk FOREIGN KEY (question_id) references question (id),
-    constraint pc_choice_id_fk FOREIGN KEY (choice_id) references choice (id)
+    constraint fk_question_choice_question_question_id FOREIGN KEY (question_id) references question (id),
+    constraint fk_question_choice_choice_choice_id FOREIGN KEY (choice_id) references choice (id)
 );
 
 insert into question (title, question_text, created_date, last_modified_date)
