@@ -53,6 +53,7 @@ public class QuestionnaireItemServiceImpl implements QuestionnaireItemService {
 
     private QuestionnaireItemDto saveAndReturnDto(QuestionnaireItem questionnaireItem) {
         QuestionnaireItem savedQuestionnaireItem = questionnaireItemRepository.save(questionnaireItem);
+        questionnaireItemRepository.refresh(savedQuestionnaireItem);
         return questionnaireItemMapper.questionnaireItemToQuestionnaireItemDto(savedQuestionnaireItem);
     }
 }
