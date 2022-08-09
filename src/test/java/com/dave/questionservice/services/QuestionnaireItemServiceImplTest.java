@@ -1,5 +1,6 @@
 package com.dave.questionservice.services;
 
+import com.dave.questionservice.api.v1.mapper.ChoiceMapper;
 import com.dave.questionservice.api.v1.mapper.QuestionnaireItemMapper;
 import com.dave.questionservice.api.v1.mapper.QuestionnaireItemMapperImpl;
 import com.dave.questionservice.api.v1.model.QuestionnaireItemDto;
@@ -16,7 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
@@ -27,6 +28,8 @@ class QuestionnaireItemServiceImplTest {
     QuestionnaireItemService questionnaireItemService;
     QuestionnaireItemMapper questionnaireItemMapper;
 
+    ChoiceMapper choiceMapper;
+
     @Mock
     QuestionnaireItemRepository questionnaireItemRepository;
 
@@ -35,7 +38,7 @@ class QuestionnaireItemServiceImplTest {
         MockitoAnnotations.openMocks(this);
 
         questionnaireItemMapper = new QuestionnaireItemMapperImpl();
-        questionnaireItemService = new QuestionnaireItemServiceImpl(questionnaireItemMapper, questionnaireItemRepository);
+        questionnaireItemService = new QuestionnaireItemServiceImpl(questionnaireItemMapper, choiceMapper,questionnaireItemRepository);
     }
 
 

@@ -1,7 +1,9 @@
 package com.dave.questionservice.services;
 
+import com.dave.questionservice.api.v1.mapper.ChoiceMapper;
 import com.dave.questionservice.api.v1.mapper.QuestionnaireItemMapper;
 import com.dave.questionservice.api.v1.model.QuestionnaireItemDto;
+import com.dave.questionservice.domain.Choice;
 import com.dave.questionservice.domain.QuestionnaireItem;
 import com.dave.questionservice.repositories.QuestionnaireItemRepository;
 import org.springframework.stereotype.Service;
@@ -13,10 +15,12 @@ import java.util.stream.Collectors;
 public class QuestionnaireItemServiceImpl implements QuestionnaireItemService {
 
     private final QuestionnaireItemMapper questionnaireItemMapper;
+    private final ChoiceMapper choiceMapper;
     private final QuestionnaireItemRepository questionnaireItemRepository;
 
-    public QuestionnaireItemServiceImpl(QuestionnaireItemMapper questionnaireItemMapper, QuestionnaireItemRepository questionnaireItemRepository) {
+    public QuestionnaireItemServiceImpl(QuestionnaireItemMapper questionnaireItemMapper, ChoiceMapper choiceMapper, QuestionnaireItemRepository questionnaireItemRepository) {
         this.questionnaireItemMapper = questionnaireItemMapper;
+        this.choiceMapper = choiceMapper;
         this.questionnaireItemRepository = questionnaireItemRepository;
     }
 
@@ -42,6 +46,10 @@ public class QuestionnaireItemServiceImpl implements QuestionnaireItemService {
     @Override
     public QuestionnaireItemDto saveQuestionnaireItemByDto(Long id, QuestionnaireItemDto questionnaireItemDto) {
         QuestionnaireItem itemToUpdate = questionnaireItemRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        Choice preferredChoice = choiceMapper.choiceDtoToChoice(questionnaireItemDto.getPreferredChoice());
+        itemToUpdate.setPreferredChoice(preferredChoice);
+        Choice unpreferredChoice = choiceMapper.choiceDtoToChoice(questionnaireItemDto.getUnpreferredChoice());
+        itemToUpdate.setUnpreferredChoice(unpreferredChoice);
         return saveAndReturnDto(itemToUpdate);
     }
 

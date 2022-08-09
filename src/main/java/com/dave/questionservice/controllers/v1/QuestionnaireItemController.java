@@ -38,4 +38,18 @@ public class QuestionnaireItemController {
     public QuestionnaireItemDto createNewItem(@RequestBody QuestionnaireItemDto dto) {
         return questionnaireItemService.createNewQuestionnaireItem(dto);
     }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public QuestionnaireItemDto updateQuestionnaireItem(@PathVariable Long id, @RequestBody QuestionnaireItemDto questionnaireItemDto) {
+        return questionnaireItemService.saveQuestionnaireItemByDto(id, questionnaireItemDto);
+    }
+
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteQuestionnaireItem(@PathVariable Long id) {
+        questionnaireItemService.deleteQuestionnaireItemById(id);
+    }
+
 }
